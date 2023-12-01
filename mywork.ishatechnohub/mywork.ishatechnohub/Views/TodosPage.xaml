@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:mywork.ishatechnohub.Models"
+             x:Class="mywork.ishatechnohub.Views.TodosPage"
+             Shell.NavBarIsVisible="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="TodoItemTemplate"
+                          x:DataType="models:TodoItem">
+                <Grid ColumnDefinitions="25,*,Auto,Auto"
+                      ColumnSpacing="4">
+                    <CheckBox
+                        IsChecked="{Binding IsDone}"/>
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding Title}"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"/>
+                    <Label
+                        Grid.Column="2"
+                        Text="{Binding DateString}"
+                        HorizontalOptions="End"
+                        VerticalOptions="Center"/>
+                    <ImageButton
+                        Grid.Column="3"
+                        Source="dotnet_bot"
+                                 HeightRequest="20"
+                                 WidthRequest="20"
+                                 Aspect="AspectFit"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"/>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        
+        <Grid RowDefinitions="*,Auto"
+              Margin="16">
+            <CollectionView
+                ItemsSource="{Binding ToDoItemsList}"
+                ItemTemplate="{StaticResource TodoItemTemplate}"
+                ></CollectionView>
+            
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
