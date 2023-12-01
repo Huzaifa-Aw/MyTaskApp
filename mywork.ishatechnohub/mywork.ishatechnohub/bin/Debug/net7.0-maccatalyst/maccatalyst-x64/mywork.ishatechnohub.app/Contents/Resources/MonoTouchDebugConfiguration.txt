@@ -1,9 +1,0 @@
-IP: 192.168.10.55
-IP: fe80::aede:48ff:fe00:1122%4
-IP: fe80::1883:ab10:feb5:566b%6
-IP: fe80::b4be:25ff:fe65:5030%11
-IP: fe80::b4be:25ff:fe65:5030%13
-IP: fe80::875c:60d2:4489:8b10%14
-IP: fe80::4a4a:6f32:3e3f:1c43%15
-IP: fe80::ce81:b1c:bd2c:69e%16
-Port: 10001
