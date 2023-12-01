@@ -1,8 +1,11 @@
+using System.Globalization;
+
 namespace mywork.ishatechnohub.Views;
 
 public partial class TodosPage
 {
     private TodosPageViewModel _viewModel;
+
     public TodosPage(TodosPageViewModel viewModel)
     {
         InitializeComponent();
@@ -11,18 +14,29 @@ public partial class TodosPage
 
     private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)
     {
+ #if IOS
         var myDatePicker = new DatePicker { IsVisible = false };
-       myDatePicker.DateSelected += MyDatePicker_OnDateSelected;
-       Root.Add(myDatePicker);
-       myDatePicker.Focus();
+        myDatePicker.DateSelected += MyDatePicker_OnDateSelected;
+        Root.Add(myDatePicker);
+        myDatePicker.Focus();
+// #else
+        // MyDatePicker.Unfocus();
+        // MyDatePicker.Focus();
+ #endif
     }
+
     private Timer _timer;
+
     private void MyDatePicker_OnDateSelected(object sender, DateChangedEventArgs e)
     {
         if (_viewModel.DateSelectedCommand is not null && _viewModel.DateSelectedCommand.CanExecute(e.NewDate))
         {
             _viewModel.DateSelectedCommand.Execute(e.NewDate);
         }
+
+ #if IOS
+
+
         if (_timer == null)
         {
             _timer = new Timer(OnTimerElapsed, sender, 3000, Timeout.Infinite);
@@ -31,12 +45,27 @@ public partial class TodosPage
         {
             _timer.Change(3000, Timeout.Infinite);
         }
-        
+#endif
     }
 
     private void OnTimerElapsed(object state)
     {
         MainThread.BeginInvokeOnMainThread(() => { Root.Remove((DatePicker)state); });
         _timer = null;
+    }
+}
+
+public class BoolToColorConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        var isBeingDragged = (bool?)value;
+        var result = (isBeingDragged ?? false) ? Color.FromArgb("#bcacdc") : Color.FromArgb("#FFFFFF");
+        return result;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return value;
     }
 }

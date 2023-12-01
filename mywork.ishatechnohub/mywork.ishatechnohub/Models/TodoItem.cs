@@ -4,6 +4,8 @@ public partial class TodoItem : ObservableObject
 {
     [ObservableProperty] private bool _isDone;
     [ObservableProperty] private string _title;
+    [ObservableProperty] private bool _isBeingDragged;
+    [ObservableProperty] private bool _isBeingDraggedOver;
     public string DateString { get; private set; }
 
     public DateTime Date
@@ -15,6 +17,6 @@ public partial class TodoItem : ObservableObject
             DateString = value.ToShortDateString();
         }
     }
-    private DateTime _tempDate;
 
+    private DateTime _tempDate;
 }

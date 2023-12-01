@@ -5,6 +5,54 @@ namespace mywork.ishatechnohub.ViewModels;
 
 public partial class TodosPageViewModel : ObservableObject
 {
+    private TodoItem _itemBeingDragged;
+    [RelayCommand]
+    private void ItemDragged(TodoItem user)
+    {
+        user.IsBeingDragged = true;
+        _itemBeingDragged = user;
+    }
+    [RelayCommand]
+    private void ItemDragLeave(TodoItem user)
+    {
+        user.IsBeingDraggedOver = false;
+    }
+    [RelayCommand]
+    private void ItemDraggedOver(TodoItem user)
+    {
+        if (user == _itemBeingDragged)
+        {
+            user.IsBeingDragged = false;
+        }
+        user.IsBeingDraggedOver = user != _itemBeingDragged;
+    }
+    [RelayCommand]
+    private void ItemDropped(TodoItem user)
+    {
+        try
+        {
+            var itemToMove = _itemBeingDragged;
+            var itemToInsertBefore = user;
+            if (itemToMove == null || itemToInsertBefore == null || itemToMove == itemToInsertBefore)
+                return;
+            int insertAtIndex = TodoItemsList.IndexOf(itemToInsertBefore);
+            if (insertAtIndex >= 0 && insertAtIndex < TodoItemsList.Count)
+            {
+                TodoItemsList.Remove(itemToMove);
+                TodoItemsList.Insert(insertAtIndex, itemToMove);
+                itemToMove.IsBeingDragged = false;
+                itemToInsertBefore.IsBeingDraggedOver = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            // ignored
+        }
+    }
+    
+    
+    
+    
     [ObservableProperty] private ObservableCollection<TodoItem> _todoItemsList;
     [ObservableProperty] private string _newToDoTitle;
     [ObservableProperty] private DateTime _newToDoDate;

@@ -4,37 +4,70 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:mywork.ishatechnohub.Models"
              xmlns:viewModels="clr-namespace:mywork.ishatechnohub.ViewModels"
+             xmlns:views="clr-namespace:mywork.ishatechnohub.Views"
              x:Class="mywork.ishatechnohub.Views.TodosPage"
              x:DataType="viewModels:TodosPageViewModel"
              Shell.NavBarIsVisible="False"
-             >
+             x:Name="MainPageContainer">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <views:BoolToColorConverter x:Key="BoolToColor" />
             <DataTemplate x:Key="TodoItemTemplate"
                           x:DataType="models:TodoItem">
-                <Grid ColumnDefinitions="25,*,Auto,Auto"
-                      ColumnSpacing="4">
-                    <CheckBox
-                        IsChecked="{Binding IsDone}" />
-                    <Label
-                        Grid.Column="1"
-                        Text="{Binding Title}"
-                        HorizontalOptions="Start"
-                        VerticalOptions="Center" />
-                    <Label
-                        Grid.Column="2"
-                        Text="{Binding DateString}"
-                        HorizontalOptions="End"
-                        VerticalOptions="Center" />
-                    <ImageButton
-                        Grid.Column="3"
-                        Source="dotnet_bot"
-                        HeightRequest="20"
-                        WidthRequest="20"
-                        Aspect="AspectFit"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Center" />
-                </Grid>
+                <VerticalStackLayout>
+                    <StackLayout
+                        Padding="10"
+                        BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource BoolToColor}}"
+                        HeightRequest="60"
+                        HorizontalOptions="FillAndExpand"
+                        Orientation="Horizontal"
+                        VerticalOptions="FillAndExpand">
+                        <Grid ColumnDefinitions="25,*,Auto,Auto"
+                              ColumnSpacing="4"
+                              HorizontalOptions="FillAndExpand">
+                            <CheckBox
+                                IsChecked="{Binding IsDone}" />
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding Title}"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center" />
+                            <Label
+                                Grid.Column="2"
+                                Text="{Binding DateString}"
+                                HorizontalOptions="End"
+                                VerticalOptions="Center" />
+                            <ImageButton
+                                Grid.Column="3"
+                                Source="dotnet_bot"
+                                HeightRequest="20"
+                                WidthRequest="20"
+                                Aspect="AspectFit"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center" />
+                        </Grid>
+                        <StackLayout.GestureRecognizers>
+                            <DragGestureRecognizer
+                                CanDrag="True"
+                                DragStartingCommand="{Binding BindingContext.ItemDraggedCommand, Source={x:Reference MainPageContainer}}"
+                                DragStartingCommandParameter="{Binding}" />
+                            <DropGestureRecognizer
+                                AllowDrop="True"
+                                DragLeaveCommand="{Binding BindingContext.ItemDragLeaveCommand, Source={x:Reference MainPageContainer}}"
+                                DragLeaveCommandParameter="{Binding}"
+                                DragOverCommand="{Binding BindingContext.ItemDraggedOverCommand, Source={x:Reference MainPageContainer}}"
+                                DragOverCommandParameter="{Binding}"
+                                DropCommand="{Binding BindingContext.ItemDroppedCommand, Source={x:Reference MainPageContainer}}"
+                                DropCommandParameter="{Binding}" />
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                    <StackLayout
+                        BackgroundColor="LightGray"
+                        HeightRequest="30"
+                        HorizontalOptions="FillAndExpand"
+                        IsVisible="{Binding IsBeingDraggedOver}"
+                        VerticalOptions="FillAndExpand" />
+                </VerticalStackLayout>
             </DataTemplate>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -45,14 +78,6 @@
               ColumnSpacing="4"
               Margin="16"
               x:Name="Root">
-            <DatePicker
-                x:Name="MyDatePicker"
-                Opacity="0"
-                HeightRequest="1"
-                WidthRequest="1"
-                Date="{Binding NewToDoDate}"
-               />
-
             <CollectionView
                 Grid.ColumnSpan="3"
                 ItemsSource="{Binding TodoItemsList}"
@@ -64,6 +89,16 @@
                 Grid.Column="1"
                 Text="#"
                 Clicked="TapGestureRecognizer_OnTapped" />
+            <DatePicker
+                x:Name="MyDatePicker"
+                Grid.Row="2"
+                Grid.Column="1"
+                Opacity="0"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                IsVisible="{OnPlatform iOS=false,Default=true}"
+                Date="{Binding NewToDoDate}"
+                DateSelected="MyDatePicker_OnDateSelected"/>
             <Button
                 Grid.Row="2"
                 Grid.Column="2"
