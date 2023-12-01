@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/huzaifa/Projects/Upwork/mywork.ishatechnohub/mywork.ishatechnohub/mywork.ishatechnohub.csproj": {}
+    "/Users/huzaifa/Projects/Upwork/MyTaskApp/mywork.ishatechnohub/mywork.ishatechnohub/mywork.ishatechnohub.csproj": {}
   },
   "projects": {
-    "/Users/huzaifa/Projects/Upwork/mywork.ishatechnohub/mywork.ishatechnohub/mywork.ishatechnohub.csproj": {
+    "/Users/huzaifa/Projects/Upwork/MyTaskApp/mywork.ishatechnohub/mywork.ishatechnohub/mywork.ishatechnohub.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/huzaifa/Projects/Upwork/mywork.ishatechnohub/mywork.ishatechnohub/mywork.ishatechnohub.csproj",
+        "projectUniqueName": "/Users/huzaifa/Projects/Upwork/MyTaskApp/mywork.ishatechnohub/mywork.ishatechnohub/mywork.ishatechnohub.csproj",
         "projectName": "mywork.ishatechnohub",
-        "projectPath": "/Users/huzaifa/Projects/Upwork/mywork.ishatechnohub/mywork.ishatechnohub/mywork.ishatechnohub.csproj",
+        "projectPath": "/Users/huzaifa/Projects/Upwork/MyTaskApp/mywork.ishatechnohub/mywork.ishatechnohub/mywork.ishatechnohub.csproj",
         "packagesPath": "/Users/huzaifa/.nuget/packages/",
-        "outputPath": "/Users/huzaifa/Projects/Upwork/mywork.ishatechnohub/mywork.ishatechnohub/obj/",
+        "outputPath": "/Users/huzaifa/Projects/Upwork/MyTaskApp/mywork.ishatechnohub/mywork.ishatechnohub/obj/",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "configFilePaths": [
