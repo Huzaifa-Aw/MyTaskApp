@@ -1,14 +1,18 @@
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace mywork.ishatechnohub.ViewModels;
 
 public partial class TodosPageViewModel : ObservableObject
 {
-    [ObservableProperty] private ObservableCollection<TodoItem> _toDoItemsList;
+    [ObservableProperty] private ObservableCollection<TodoItem> _todoItemsList;
+    [ObservableProperty] private string _newToDoTitle;
+    [ObservableProperty] private DateTime _newToDoDate;
 
     public TodosPageViewModel()
     {
-        ToDoItemsList = new ObservableCollection<TodoItem>
+        NewToDoDate = DateTime.Today;
+        TodoItemsList = new ObservableCollection<TodoItem>
         {
             new ()
             {
@@ -41,5 +45,26 @@ public partial class TodosPageViewModel : ObservableObject
                 Date = DateTime.Today.AddDays(-2)
             }
         };
+    }
+
+    
+    [RelayCommand]
+    private void DateSelected(DateTime date)
+    {
+        NewToDoDate = date;
+    }
+    
+    [RelayCommand]
+    private void AddToDo()
+    {
+        TodoItemsList.Add(new TodoItem
+        {
+            Title = NewToDoTitle,
+            IsDone = false,
+            Date = NewToDoDate
+        });
+        NewToDoTitle = string.Empty;
+        NewToDoDate = DateTime.Today;
+        
     }
 }
