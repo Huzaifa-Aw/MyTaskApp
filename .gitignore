@@ -1,0 +1,43 @@
+# .NET MAUI specific
+*.appsettings.json
+*.appsettings.Development.json
+*.appsettings.Production.json
+*.msix
+*.msixbundle
+
+# Build/Temp files
+bin/
+obj/
+.build/
+
+# User-specific files
+*.userprefs
+*.suo
+*.user
+*.xcuserstate
+
+# Build results
+*.apk
+*.aab
+*.ipa
+*.dll
+*.dylib
+*.exe
+*.nupkg
+
+# Logs and databases
+*.log
+*.sqlite
+*.sqlite3
+
+# Visual Studio files
+.vs/
+*.sln.cache
+*.vscode/
+
+# NuGet packages
+packages/
+packages.lock.json
+
+# macOS specific files
+.DS_Store
