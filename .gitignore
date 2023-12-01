@@ -5,6 +5,9 @@
 *.msix
 *.msixbundle
 
+# JetBrains IDEs
+.idea/
+
 # Build/Temp files
 bin/
 obj/
