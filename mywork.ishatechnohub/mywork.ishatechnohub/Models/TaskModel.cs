@@ -7,5 +7,8 @@ public partial class TaskModel: ObservableObject
     [ObservableProperty] private string _username;
     [ObservableProperty] private string _linkedProjectName;
     [ObservableProperty] private bool _isDone;
+    [ObservableProperty] private bool _isBeingDragged;
+    [ObservableProperty] private bool _isBeingDraggedOver;
+    
 
 }

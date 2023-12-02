@@ -27,14 +27,7 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="4"></RoundRectangle>
                         </Border.StrokeShape>
-                        <VerticalStackLayout BackgroundColor="Transparent"
-                                             HorizontalOptions="FillAndExpand">
-                            <StackLayout
-                                Padding="10"
-                                BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource BoolToColor}}"
-                                HorizontalOptions="FillAndExpand"
-                                Orientation="Horizontal"
-                                VerticalOptions="FillAndExpand">
+                       
                         <mct:Expander
                             x:Name="ExpanderControl"
                             VerticalOptions="FillAndExpand"
@@ -44,7 +37,7 @@
                                       HeightRequest="40"
                                       HorizontalOptions="FillAndExpand"
                                       ColumnDefinitions="Auto,*,Auto,24"
-                                      BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light=WhiteSmoke,Default=WhiteSmoke}"
+                                      BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light=Transparent,Default=Transparent}"
                                       >
                                     <Border
                                         BackgroundColor="{StaticResource Primary}"
@@ -118,10 +111,18 @@
                                                     <Border.StrokeShape>
                                                         <RoundRectangle CornerRadius="4"></RoundRectangle>
                                                     </Border.StrokeShape>
-                                                   
+                                                    <VerticalStackLayout BackgroundColor="Transparent"
+                                                                         HorizontalOptions="FillAndExpand">
+                                                        <StackLayout
+                                                            Padding="10"
+                                                            BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource BoolToColor}}"
+                                                            HorizontalOptions="FillAndExpand"
+                                                            Orientation="Horizontal"
+                                                            VerticalOptions="FillAndExpand">
                                                     <Grid ColumnDefinitions="25,*,Auto,*"
                                                           ColumnSpacing="4"
-                                                          HorizontalOptions="FillAndExpand">
+                                                          HorizontalOptions="FillAndExpand"
+                                                          VerticalOptions="Center">
                                                         <Grid HeightRequest="25" WidthRequest="25">
                                                             <ImageButton
                                                                 Source="checked_image"
@@ -163,16 +164,7 @@
                                                             ValueChanged="Slider_OnValueChanged">
                                                         </Slider>
                                                     </Grid>
-                                                               
-                                                </Border>
-                                            </VerticalStackLayout>
-                                        </DataTemplate>
-                                    </BindableLayout.ItemTemplate>
-                                </VerticalStackLayout>
-                            </VerticalStackLayout>
-
-                        </mct:Expander>
-                                <StackLayout.GestureRecognizers>
+                                                          <StackLayout.GestureRecognizers>
                                                                 <DragGestureRecognizer
                                                                     CanDrag="True"
                                                                     DragStartingCommand="{Binding BindingContext.ItemDraggedCommand, Source={x:Reference MainPageContainer}}"
@@ -193,7 +185,16 @@
                                                             HorizontalOptions="FillAndExpand"
                                                             IsVisible="{Binding IsBeingDraggedOver}"
                                                             VerticalOptions="FillAndExpand" />
-                                                    </VerticalStackLayout>   
+                                                    </VerticalStackLayout>         
+                                                </Border>
+                                            </VerticalStackLayout>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+
+                        </mct:Expander>
+                               
                     </Border>
                 </VerticalStackLayout>
             </DataTemplate>

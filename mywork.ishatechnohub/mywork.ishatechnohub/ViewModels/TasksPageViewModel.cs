@@ -147,20 +147,20 @@ public partial class TasksPageViewModel : ObservableObject
         NewTaskDate = DateTime.Today;
         SelectedProjectTitle = string.Empty;
     }
-    private ProjectModel _itemBeingDragged;
+    private TaskModel _itemBeingDragged;
     [RelayCommand]
-    private void ItemDragged(ProjectModel user)
+    private void ItemDragged(TaskModel user)
     {
         user.IsBeingDragged = true;
         _itemBeingDragged = user;
     }
     [RelayCommand]
-    private void ItemDragLeave(ProjectModel user)
+    private void ItemDragLeave(TaskModel user)
     {
         user.IsBeingDraggedOver = false;
     }
     [RelayCommand]
-    private void ItemDraggedOver(ProjectModel user)
+    private void ItemDraggedOver(TaskModel user)
     {
         if (user == _itemBeingDragged)
         {
@@ -169,7 +169,7 @@ public partial class TasksPageViewModel : ObservableObject
         user.IsBeingDraggedOver = user != _itemBeingDragged;
     }
     [RelayCommand]
-    private void ItemDropped(ProjectModel user)
+    private void ItemDropped(TaskModel user)
     {
         try
         {
@@ -177,11 +177,12 @@ public partial class TasksPageViewModel : ObservableObject
             var itemToInsertBefore = user;
             if (itemToMove == null || itemToInsertBefore == null || itemToMove == itemToInsertBefore)
                 return;
-            int insertAtIndex = ProjectTaskList.IndexOf(itemToInsertBefore);
+            var project = ProjectTaskList.First(x => x.Title.Equals(itemToInsertBefore.LinkedProjectName));
+            int insertAtIndex = project.Tasks.IndexOf(itemToInsertBefore);
             if (insertAtIndex >= 0 && insertAtIndex < ProjectTaskList.Count)
             {
-                ProjectTaskList.Remove(itemToMove);
-                ProjectTaskList.Insert(insertAtIndex, itemToMove);
+                project.Tasks.Remove(itemToMove);
+                project.Tasks.Insert(insertAtIndex, itemToMove);
                 itemToMove.IsBeingDragged = false;
                 itemToInsertBefore.IsBeingDraggedOver = false;
             }
