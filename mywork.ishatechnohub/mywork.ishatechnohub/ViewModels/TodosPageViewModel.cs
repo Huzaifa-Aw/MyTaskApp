@@ -118,6 +118,7 @@ public partial class TodosPageViewModel : ObservableObject
     [RelayCommand]
     private void ChangeDoneStatus(TodoItem todo)
     {
-        todo.IsDone = !todo.IsDone;
+        var tobeRemoved=_=TodoItemsList.First(t=>t.Title.Equals(todo.Title));
+        TodoItemsList.Remove(tobeRemoved);
     }
 }
