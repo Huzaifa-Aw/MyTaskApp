@@ -139,4 +139,48 @@ public partial class TasksPageViewModel : ObservableObject
         NewTaskDate = DateTime.Today;
         SelectedProjectTitle = string.Empty;
     }
+    private ProjectModel _itemBeingDragged;
+    [RelayCommand]
+    private void ItemDragged(ProjectModel user)
+    {
+        user.IsBeingDragged = true;
+        _itemBeingDragged = user;
+    }
+    [RelayCommand]
+    private void ItemDragLeave(ProjectModel user)
+    {
+        user.IsBeingDraggedOver = false;
+    }
+    [RelayCommand]
+    private void ItemDraggedOver(ProjectModel user)
+    {
+        if (user == _itemBeingDragged)
+        {
+            user.IsBeingDragged = false;
+        }
+        user.IsBeingDraggedOver = user != _itemBeingDragged;
+    }
+    [RelayCommand]
+    private void ItemDropped(ProjectModel user)
+    {
+        try
+        {
+            var itemToMove = _itemBeingDragged;
+            var itemToInsertBefore = user;
+            if (itemToMove == null || itemToInsertBefore == null || itemToMove == itemToInsertBefore)
+                return;
+            int insertAtIndex = ProjectTaskList.IndexOf(itemToInsertBefore);
+            if (insertAtIndex >= 0 && insertAtIndex < ProjectTaskList.Count)
+            {
+                ProjectTaskList.Remove(itemToMove);
+                ProjectTaskList.Insert(insertAtIndex, itemToMove);
+                itemToMove.IsBeingDragged = false;
+                itemToInsertBefore.IsBeingDraggedOver = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            // ignored
+        }
+    }
 }

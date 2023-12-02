@@ -10,7 +10,8 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              x:DataType="viewModels:TasksPageViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="WhiteSmoke">
+             BackgroundColor="WhiteSmoke"
+             x:Name="MainPageContainer">
     <ContentPage.Resources>
         <ResourceDictionary>
             <ishatechnohub:GradientColorConverter x:Key="GradientColorConverter" />
@@ -26,10 +27,18 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="4"></RoundRectangle>
                         </Border.StrokeShape>
+                        <VerticalStackLayout BackgroundColor="Transparent"
+                                             HorizontalOptions="FillAndExpand">
+                            <StackLayout
+                                Padding="10"
+                                BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource BoolToColor}}"
+                                HorizontalOptions="FillAndExpand"
+                                Orientation="Horizontal"
+                                VerticalOptions="FillAndExpand">
                         <mct:Expander
                             x:Name="ExpanderControl"
-                            VerticalOptions="Start"
-                            HorizontalOptions="Fill">
+                            VerticalOptions="FillAndExpand"
+                            HorizontalOptions="FillAndExpand">
                             <mct:Expander.Header>
                                 <Grid Padding="0"
                                       HeightRequest="40"
@@ -106,6 +115,7 @@
                                                     <Border.StrokeShape>
                                                         <RoundRectangle CornerRadius="4"></RoundRectangle>
                                                     </Border.StrokeShape>
+                                                   
                                                     <Grid ColumnDefinitions="25,*,Auto,*"
                                                           ColumnSpacing="4"
                                                           HorizontalOptions="FillAndExpand">
@@ -150,6 +160,7 @@
                                                             ValueChanged="Slider_OnValueChanged">
                                                         </Slider>
                                                     </Grid>
+                                                               
                                                 </Border>
                                             </VerticalStackLayout>
                                         </DataTemplate>
@@ -158,6 +169,28 @@
                             </VerticalStackLayout>
 
                         </mct:Expander>
+                                <StackLayout.GestureRecognizers>
+                                                                <DragGestureRecognizer
+                                                                    CanDrag="True"
+                                                                    DragStartingCommand="{Binding BindingContext.ItemDraggedCommand, Source={x:Reference MainPageContainer}}"
+                                                                    DragStartingCommandParameter="{Binding}" />
+                                                                <DropGestureRecognizer
+                                                                    AllowDrop="True"
+                                                                    DragLeaveCommand="{Binding BindingContext.ItemDragLeaveCommand, Source={x:Reference MainPageContainer}}"
+                                                                    DragLeaveCommandParameter="{Binding}"
+                                                                    DragOverCommand="{Binding BindingContext.ItemDraggedOverCommand, Source={x:Reference MainPageContainer}}"
+                                                                    DragOverCommandParameter="{Binding}"
+                                                                    DropCommand="{Binding BindingContext.ItemDroppedCommand, Source={x:Reference MainPageContainer}}"
+                                                                    DropCommandParameter="{Binding}" />
+                                                            </StackLayout.GestureRecognizers>
+                                                        </StackLayout>
+                                                        <StackLayout
+                                                            BackgroundColor="LightGray"
+                                                            HeightRequest="30"
+                                                            HorizontalOptions="FillAndExpand"
+                                                            IsVisible="{Binding IsBeingDraggedOver}"
+                                                            VerticalOptions="FillAndExpand" />
+                                                    </VerticalStackLayout>   
                     </Border>
                 </VerticalStackLayout>
             </DataTemplate>
@@ -188,10 +221,8 @@
                 Grid.Row="0"
                 Grid.ColumnSpan="3">
                 <VerticalStackLayout
-                    x:Name="BindableStackLayout"
                     BindableLayout.ItemsSource="{Binding ProjectTaskList}"
                     BindableLayout.ItemTemplate="{StaticResource  ExpanderDataTemplate}" />
-
             </ScrollView>
             <Grid
                 Grid.Row="1"

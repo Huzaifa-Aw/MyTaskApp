@@ -7,7 +7,8 @@ public partial class ProjectModel : ObservableObject
     [ObservableProperty] private IEnumerable<TaskModel> _tasks;
     [ObservableProperty] private int _taskCount;
     [ObservableProperty] private string _dateString;
-
+    [ObservableProperty] private bool _isBeingDragged;
+    [ObservableProperty] private bool _isBeingDraggedOver;
     public DateTime Date
     {
         get => _tempDate;
