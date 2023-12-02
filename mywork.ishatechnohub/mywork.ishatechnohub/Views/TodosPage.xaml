@@ -37,11 +37,12 @@
                                 Text="{Binding DateString}"
                                 HorizontalOptions="End"
                                 VerticalOptions="Center" />
-                            <ImageButton
+                            <Image
                                 Grid.Column="3"
-                                Source="dotnet_bot"
-                                HeightRequest="20"
-                                WidthRequest="20"
+                                Margin="8,0,0,0"
+                                Source="pencil"
+                                HeightRequest="25"
+                                WidthRequest="25"
                                 Aspect="AspectFit"
                                 VerticalOptions="Center"
                                 HorizontalOptions="Center" />

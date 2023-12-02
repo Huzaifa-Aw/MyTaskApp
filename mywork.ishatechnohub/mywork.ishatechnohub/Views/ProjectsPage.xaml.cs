@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Core;
+
 namespace mywork.ishatechnohub.Views;
 
 public partial class ProjectsPage
@@ -6,5 +8,6 @@ public partial class ProjectsPage
     {
         InitializeComponent();
         BindingContext = viewModel;
+        
     }
 }

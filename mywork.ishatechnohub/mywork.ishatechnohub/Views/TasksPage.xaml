@@ -2,8 +2,186 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="mywork.ishatechnohub.Views.TasksPage">
+             x:Class="mywork.ishatechnohub.Views.TasksPage"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:models="clr-namespace:mywork.ishatechnohub.Models"
+             xmlns:viewModels="clr-namespace:mywork.ishatechnohub.ViewModels"
+             xmlns:ishatechnohub="clr-namespace:mywork.ishatechnohub"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             x:DataType="viewModels:TasksPageViewModel"
+             Shell.NavBarIsVisible="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ishatechnohub:GradientColorConverter x:Key="GradientColorConverter" />
+
+            <DataTemplate x:Key="ExpanderDataTemplate"
+                          x:DataType="models:ProjectModel">
+                <VerticalStackLayout
+                    Margin="0,8">
+                    <mct:Expander
+                        x:Name="ExpanderControl"
+                        VerticalOptions="Start"
+                        HorizontalOptions="Fill">
+                        <mct:Expander.Header>
+                            <Grid Padding="0"
+                                  HeightRequest="40"
+                                  HorizontalOptions="FillAndExpand"
+                                  ColumnDefinitions="Auto,*,Auto,24">
+                                <Border
+                                    BackgroundColor="{StaticResource Primary}"
+                                    Padding="8,0"
+                                    Margin="0,0,8,0"
+                                    WidthRequest="40"
+                                    StrokeThickness="0"
+                                    InputTransparent="True">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="20" />
+                                    </Border.StrokeShape>
+                                    <Label FontSize="14"
+                                           TextColor="White"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center"
+                                           Text="{Binding TaskCount}"
+                                           InputTransparent="True" />
+                                </Border>
+                                <Border
+                                    Grid.Column="1"
+                                    HorizontalOptions="FillAndExpand"
+                                    StrokeThickness="0"
+                                    Margin="0"
+                                    Padding="0">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="8" />
+                                    </Border.StrokeShape>
+                                    <Label
+                                        FontSize="18"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center"
+                                        Padding="8,0,0,0"
+                                        Text="{Binding Title}"
+                                        Background="{Binding CompletedPercentage, Converter={StaticResource GradientColorConverter}}" />
+                                </Border>
+                                <Label Grid.Column="2"
+                                       FontSize="18"
+                                       Margin="16,0"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="End"
+                                       Text="{Binding DateString}" />
+                                <Image x:Name="ExpanderIcon"
+                                       Grid.Column="3"
+                                       Source="ic_down_arrow"
+                                       Aspect="AspectFit"
+                                       VerticalOptions="Center">
+                                    <Image.Triggers>
+                                        <DataTrigger TargetType="Image"
+                                                     Binding="{Binding Source={x:Reference ExpanderControl}, Path=IsExpanded}"
+                                                     Value="True">
+                                            <Setter Property="Rotation"
+                                                    Value="180" />
+                                        </DataTrigger>
+                                    </Image.Triggers>
+                                </Image>
+                            </Grid>
+                        </mct:Expander.Header>
+                        <VerticalStackLayout Spacing="8"
+                                             Margin="0,4,0,0">
+                            <!-- Body -->
+                            <VerticalStackLayout Margin="0"
+                                                 BindableLayout.ItemsSource="{Binding Tasks}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="models:TaskModel">
+                                        <Grid ColumnDefinitions="25,*,Auto,Auto"
+                                              ColumnSpacing="4"
+                                              HorizontalOptions="FillAndExpand"
+                                              Margin="0,4">
+                                            <CheckBox
+                                                IsChecked="{Binding IsDone}" />
+                                            <Label
+                                                Grid.Column="1"
+                                                Text="{Binding Title }"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="Center" />
+                                            <Label
+                                                Grid.Column="2"
+                                                Text="{Binding Username}"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Center" />
+                                            <ProgressBar
+                                                MinimumWidthRequest="100"
+                                                Margin="16,0,0,0"
+                                                Grid.Column="3"
+                                                Progress="{Binding CompletedPercentage}"
+                                                ProgressColor="{StaticResource Primary}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+
+                    </mct:Expander>
+                </VerticalStackLayout>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        
+        <Grid Margin="16"
+              RowDefinitions="*,Auto,Auto"
+              RowSpacing="8"
+              x:Name="Root">
+            <!-- MAUI bug that prevents invoking Picker on Android hence Picker Tag with 0 opacity -->
+            <Picker x:Name="UserPicker"
+                    Opacity="0"
+                    HeightRequest="1"
+                    WidthRequest="1"
+                    ItemsSource="{Binding UsersList}"
+                    SelectedIndexChanged="UserPicker_OnSelectedIndexChanged">
+                <Picker.IsVisible>
+                    <OnPlatform x:TypeArguments="system:Boolean">
+                        <On Platform="iOS"
+                            Value="False" />
+                        <On Platform="Android"
+                            Value="True" />
+                    </OnPlatform>
+                </Picker.IsVisible>
+            </Picker>
+            <CollectionView
+                Grid.ColumnSpan="3"
+                ItemsSource="{Binding ProjectTaskList}"
+                ItemTemplate="{StaticResource  ExpanderDataTemplate}" />
+
+            <Grid
+                Grid.Row="1"
+                ColumnDefinitions="*,Auto,Auto,Auto"
+                ColumnSpacing="4">
+                <Picker x:Name="ProjectPicker"
+                        ItemsSource="{Binding ProjectsList}"
+                        SelectedItem="{Binding SelectedProjectTitle}"
+                        SelectedIndexChanged="ProjectPicker_OnSelectedIndexChanged">
+                </Picker>
+                <Button
+                    Grid.Column="1"
+                    Text="U"
+                    Clicked="UserSelection_OnClicked" />
+                <Button
+                    Grid.Column="2"
+                    Text="#"
+                    Clicked="TapGestureRecognizer_OnTapped" />
+                <DatePicker
+                    x:Name="MyDatePicker"
+                    Grid.Column="2"
+                    Opacity="0"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    IsVisible="{OnPlatform iOS=false,Default=true}"
+                    Date="{Binding NewTaskDate}"
+                    DateSelected="MyDatePicker_OnDateSelected" />
+                <Button
+                    Grid.Column="3"
+                    Text="+"
+                    Command="{Binding AddToDoCommand}" />
+            </Grid>
+            <Entry Grid.Row="2"
+                   Text="{Binding NewTaskTitle}" />
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

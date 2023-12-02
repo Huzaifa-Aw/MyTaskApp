@@ -19,9 +19,6 @@ public partial class TodosPage
         myDatePicker.DateSelected += MyDatePicker_OnDateSelected;
         Root.Add(myDatePicker);
         myDatePicker.Focus();
-// #else
-        // MyDatePicker.Unfocus();
-        // MyDatePicker.Focus();
  #endif
     }
 
