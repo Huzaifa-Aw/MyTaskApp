@@ -10,7 +10,7 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              x:DataType="viewModels:TasksPageViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="WhiteSmoke"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource Gray300},Light=WhiteSmoke,Default=WhiteSmoke}"
              x:Name="MainPageContainer">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -21,8 +21,8 @@
                 <VerticalStackLayout
                     Margin="0,8">
                     <Border StrokeThickness="2"
-                            BackgroundColor="{StaticResource Gray100}"
-                            Stroke="{StaticResource  Gray400Brush}"
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light={StaticResource Gray100},Default={StaticResource Gray100}}"
+                            Stroke="{StaticResource  Gray500Brush}"
                             Padding="4">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="4"></RoundRectangle>
@@ -43,7 +43,9 @@
                                 <Grid Padding="0"
                                       HeightRequest="40"
                                       HorizontalOptions="FillAndExpand"
-                                      ColumnDefinitions="Auto,*,Auto,24">
+                                      ColumnDefinitions="Auto,*,Auto,24"
+                                      BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light=WhiteSmoke,Default=WhiteSmoke}"
+                                      >
                                     <Border
                                         BackgroundColor="{StaticResource Primary}"
                                         Padding="8,0"
@@ -66,7 +68,8 @@
                                         HorizontalOptions="FillAndExpand"
                                         StrokeThickness="0"
                                         Margin="0"
-                                        Padding="0">
+                                        Padding="0"
+                                        >
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="8" />
                                         </Border.StrokeShape>
@@ -109,8 +112,8 @@
                                         <DataTemplate x:DataType="models:TaskModel">
                                             <VerticalStackLayout Margin="0,4">
                                                 <Border StrokeThickness="2"
-                                                        BackgroundColor="WhiteSmoke"
-                                                        Stroke="{StaticResource  Gray400Brush}"
+                                                        BackgroundColor="{AppThemeBinding Dark={StaticResource Gray500},Light=WhiteSmoke,Default=WhiteSmoke}"
+                                                        Stroke="{StaticResource  Gray600Brush}"
                                                         Padding="4">
                                                     <Border.StrokeShape>
                                                         <RoundRectangle CornerRadius="4"></RoundRectangle>
@@ -231,7 +234,9 @@
                 <Picker x:Name="ProjectPicker"
                         ItemsSource="{Binding ProjectsList}"
                         SelectedItem="{Binding SelectedProjectTitle}"
-                        SelectedIndexChanged="ProjectPicker_OnSelectedIndexChanged">
+                        SelectedIndexChanged="ProjectPicker_OnSelectedIndexChanged"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light=WhiteSmoke,Default=WhiteSmoke}"
+>
                 </Picker>
                 <Button
                     Grid.Column="1"
@@ -256,7 +261,9 @@
                     Command="{Binding AddTaskCommand}" />
             </Grid>
             <Entry Grid.Row="2"
-                   Text="{Binding NewTaskTitle}" />
+                   Text="{Binding NewTaskTitle}" 
+                   BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light=WhiteSmoke,Default=WhiteSmoke}"
+                   />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

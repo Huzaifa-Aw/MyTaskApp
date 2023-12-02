@@ -1,5 +1,3 @@
-using System.Globalization;
-
 namespace mywork.ishatechnohub.Views;
 
 public partial class TodosPage
@@ -50,4 +48,19 @@ public partial class TodosPage
         MainThread.BeginInvokeOnMainThread(() => { Root.Remove((DatePicker)state); });
         _timer = null;
     }
+
+    private void ThemeSwitch_OnToggled(object sender, ToggledEventArgs e)
+    {
+        Application.Current!.UserAppTheme = e.Value switch
+        {
+            true => AppTheme.Dark,
+            false=>AppTheme.Light,
+        };
+    }
+
+    private void ImageButton_OnClicked(object sender, EventArgs e)
+    {
+        //Resize here
+    }
+    
 }
