@@ -115,4 +115,9 @@ public partial class TodosPageViewModel : ObservableObject
         NewToDoDate = DateTime.Today;
         
     }
+    [RelayCommand]
+    private void ChangeDoneStatus(TodoItem todo)
+    {
+        todo.IsDone = !todo.IsDone;
+    }
 }

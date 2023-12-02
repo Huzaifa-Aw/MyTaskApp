@@ -2,21 +2,15 @@ namespace mywork.ishatechnohub;
 
 public class GradientColorConverter : IValueConverter
 {
-    private static Color MediumRed =>Color.FromHex("#DC3824");
+    private static Color MediumRed => Color.FromArgb("#DC3824");
 
-    private static Color MediumYellow => Color.FromHex("#FF8C00");
+    private static Color MediumYellow => Color.FromArgb("#FF8C00");
 
-    private static Color MediumGreen => Color.FromHex("#00994E");
+    private static Color MediumGreen => Color.FromArgb("#00994E");
 
-    [Obsolete("Obsolete")]
-    public
-        object
-        Convert(object
-            value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value
-            is
-            not int completedPercentage) return Colors.Transparent;
+        if (value is not double completedPercentage) return Colors.Transparent;
         var gradientStops = new GradientStopCollection();
 
         switch (completedPercentage)
@@ -39,15 +33,10 @@ public class GradientColorConverter : IValueConverter
         }
 
         return new LinearGradientBrush(gradientStops, new Point(0, 0), new Point(1, 0));
-
     }
 
-    public
-        object
-        ConvertBack(object
-            value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        throw
-            new NotImplementedException();
+        throw new NotImplementedException();
     }
 }

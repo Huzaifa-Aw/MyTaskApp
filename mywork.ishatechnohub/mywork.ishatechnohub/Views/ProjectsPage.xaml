@@ -5,6 +5,8 @@
              xmlns:viewModels="clr-namespace:mywork.ishatechnohub.ViewModels"
              x:Class="mywork.ishatechnohub.Views.ProjectsPage"
              x:DataType="viewModels:ProjectsPageViewModel"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="WhiteSmoke"
+             >
     
 </ContentPage>

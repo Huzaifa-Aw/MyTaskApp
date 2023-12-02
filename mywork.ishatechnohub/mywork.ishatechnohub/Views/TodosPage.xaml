@@ -8,66 +8,98 @@
              x:Class="mywork.ishatechnohub.Views.TodosPage"
              x:DataType="viewModels:TodosPageViewModel"
              Shell.NavBarIsVisible="False"
+             BackgroundColor="WhiteSmoke"
              x:Name="MainPageContainer">
     <ContentPage.Resources>
         <ResourceDictionary>
             <views:BoolToColorConverter x:Key="BoolToColor" />
             <DataTemplate x:Key="TodoItemTemplate"
                           x:DataType="models:TodoItem">
-                <VerticalStackLayout>
-                    <StackLayout
-                        Padding="10"
-                        BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource BoolToColor}}"
-                        HeightRequest="60"
-                        HorizontalOptions="FillAndExpand"
-                        Orientation="Horizontal"
-                        VerticalOptions="FillAndExpand">
-                        <Grid ColumnDefinitions="25,*,Auto,Auto"
-                              ColumnSpacing="4"
-                              HorizontalOptions="FillAndExpand">
-                            <CheckBox
-                                IsChecked="{Binding IsDone}" />
-                            <Label
-                                Grid.Column="1"
-                                Text="{Binding Title}"
-                                HorizontalOptions="Start"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Column="2"
-                                Text="{Binding DateString}"
-                                HorizontalOptions="End"
-                                VerticalOptions="Center" />
-                            <Image
-                                Grid.Column="3"
-                                Margin="8,0,0,0"
-                                Source="pencil"
-                                HeightRequest="25"
-                                WidthRequest="25"
-                                Aspect="AspectFit"
-                                VerticalOptions="Center"
-                                HorizontalOptions="Center" />
-                        </Grid>
-                        <StackLayout.GestureRecognizers>
-                            <DragGestureRecognizer
-                                CanDrag="True"
-                                DragStartingCommand="{Binding BindingContext.ItemDraggedCommand, Source={x:Reference MainPageContainer}}"
-                                DragStartingCommandParameter="{Binding}" />
-                            <DropGestureRecognizer
-                                AllowDrop="True"
-                                DragLeaveCommand="{Binding BindingContext.ItemDragLeaveCommand, Source={x:Reference MainPageContainer}}"
-                                DragLeaveCommandParameter="{Binding}"
-                                DragOverCommand="{Binding BindingContext.ItemDraggedOverCommand, Source={x:Reference MainPageContainer}}"
-                                DragOverCommandParameter="{Binding}"
-                                DropCommand="{Binding BindingContext.ItemDroppedCommand, Source={x:Reference MainPageContainer}}"
-                                DropCommandParameter="{Binding}" />
-                        </StackLayout.GestureRecognizers>
-                    </StackLayout>
-                    <StackLayout
-                        BackgroundColor="LightGray"
-                        HeightRequest="30"
-                        HorizontalOptions="FillAndExpand"
-                        IsVisible="{Binding IsBeingDraggedOver}"
-                        VerticalOptions="FillAndExpand" />
+                <VerticalStackLayout BackgroundColor="Transparent"
+                                     Margin="0,8">
+                    <Border BackgroundColor="{StaticResource Gray100}"
+                            Stroke="{StaticResource  Gray400Brush}"
+                            StrokeThickness="2">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="4"></RoundRectangle>
+                        </Border.StrokeShape>
+                        <VerticalStackLayout BackgroundColor="Transparent">
+                            <StackLayout
+                                Padding="10"
+                                BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource BoolToColor}}"
+                                HeightRequest="60"
+                                HorizontalOptions="FillAndExpand"
+                                Orientation="Horizontal"
+                                VerticalOptions="FillAndExpand">
+                                <Grid ColumnDefinitions="25,*,Auto,Auto"
+                                      ColumnSpacing="4"
+                                      HeightRequest="40"
+                                      HorizontalOptions="FillAndExpand"
+                                      VerticalOptions="Fill">
+                                    <Grid HeightRequest="25" WidthRequest="25">
+                                    <ImageButton
+                                        Source="checked_image"
+                                        Aspect="AspectFit"
+                                        IsVisible="{Binding IsDone}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:TodosPageViewModel}}, Path=ChangeDoneStatusCommand}"
+                                        CommandParameter="{Binding .}" />
+
+                                    <ImageButton
+                                        Source="unchecked_image"
+                                        Aspect="AspectFit"
+                                        IsVisible="{Binding IsDone,Converter={StaticResource InvertedBoolConverter}}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:TodosPageViewModel}}, Path=ChangeDoneStatusCommand}"
+                                        CommandParameter="{Binding .}" />
+                                    </Grid>
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding Title}"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        Grid.Column="2"
+                                        Text="{Binding DateString}"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Center" />
+                                    <Frame
+                                        BackgroundColor="{StaticResource Gray200}"
+                                        Grid.Column="3"
+                                        Padding="10,0"
+                                        Margin="8,0,0,0"
+                                        VerticalOptions="Fill"
+                                        HorizontalOptions="Fill">
+                                        <Image
+                                            Source="pencil"
+                                            HeightRequest="25"
+                                            WidthRequest="25"
+                                            Aspect="AspectFit"
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Center" />
+                                    </Frame>
+                                </Grid>
+                                <StackLayout.GestureRecognizers>
+                                    <DragGestureRecognizer
+                                        CanDrag="True"
+                                        DragStartingCommand="{Binding BindingContext.ItemDraggedCommand, Source={x:Reference MainPageContainer}}"
+                                        DragStartingCommandParameter="{Binding}" />
+                                    <DropGestureRecognizer
+                                        AllowDrop="True"
+                                        DragLeaveCommand="{Binding BindingContext.ItemDragLeaveCommand, Source={x:Reference MainPageContainer}}"
+                                        DragLeaveCommandParameter="{Binding}"
+                                        DragOverCommand="{Binding BindingContext.ItemDraggedOverCommand, Source={x:Reference MainPageContainer}}"
+                                        DragOverCommandParameter="{Binding}"
+                                        DropCommand="{Binding BindingContext.ItemDroppedCommand, Source={x:Reference MainPageContainer}}"
+                                        DropCommandParameter="{Binding}" />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                            <StackLayout
+                                BackgroundColor="LightGray"
+                                HeightRequest="30"
+                                HorizontalOptions="FillAndExpand"
+                                IsVisible="{Binding IsBeingDraggedOver}"
+                                VerticalOptions="FillAndExpand" />
+                        </VerticalStackLayout>
+                    </Border>
                 </VerticalStackLayout>
             </DataTemplate>
         </ResourceDictionary>
@@ -99,7 +131,7 @@
                 VerticalOptions="FillAndExpand"
                 IsVisible="{OnPlatform iOS=false,Default=true}"
                 Date="{Binding NewToDoDate}"
-                DateSelected="MyDatePicker_OnDateSelected"/>
+                DateSelected="MyDatePicker_OnDateSelected" />
             <Button
                 Grid.Row="2"
                 Grid.Column="2"

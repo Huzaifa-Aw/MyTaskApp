@@ -19,20 +19,22 @@ public partial class TasksPageViewModel : ObservableObject
             new ProjectModel()
             {
                 Title = "Project 1",
-                CompletedPercentage = 20,
+                CompletedPercentage = 0,
                 Tasks = new List<TaskModel>()
                 {
                     new TaskModel()
                     {
                         Title = "Task 1.1",
-                        CompletedPercentage = 0.5,
-                        Username = "user1"
+                        CompletedPercentage = 50,
+                        Username = "user1",
+                        LinkedProjectName = "Project 1"
                     },
                     new TaskModel()
                     {
                         Title = "Task 1.2",
-                        CompletedPercentage = 1,
-                        Username = "user2"
+                        CompletedPercentage = 100,
+                        Username = "user2",
+                        LinkedProjectName = "Project 1"
                     }
                 },
                 Date = DateTime.Now
@@ -40,20 +42,22 @@ public partial class TasksPageViewModel : ObservableObject
             new ProjectModel()
             {
                 Title = "Project 2",
-                CompletedPercentage = 55,
+                CompletedPercentage = 0,
                 Tasks = new List<TaskModel>()
                 {
                     new TaskModel()
                     {
                         Title = "Task 2.1",
-                        CompletedPercentage = .25,
-                        Username = "user3"
+                        CompletedPercentage = 25,
+                        Username = "user3",
+                        LinkedProjectName = "Project 2"
                     },
                     new TaskModel()
                     {
                         Title = "Task 2.2",
-                        CompletedPercentage = .75,
-                        Username = "user4"
+                        CompletedPercentage = 75,
+                        Username = "user4",
+                        LinkedProjectName = "Project 2"
                     }
                 },
                 Date = DateTime.Now
@@ -61,20 +65,22 @@ public partial class TasksPageViewModel : ObservableObject
             new ProjectModel()
             {
                 Title = "Project 3",
-                CompletedPercentage = 96,
+                CompletedPercentage = 0,
                 Tasks = new List<TaskModel>()
                 {
                     new TaskModel()
                     {
                         Title = "Task 3.1",
                         CompletedPercentage = 0,
-                        Username = "user5"
+                        Username = "user5",
+                        LinkedProjectName = "Project 3"
                     },
                     new TaskModel()
                     {
                         Title = "Task 3.2",
-                        CompletedPercentage = .9,
-                        Username = "user6"
+                        CompletedPercentage = 90,
+                        Username = "user6",
+                        LinkedProjectName = "Project 3"
                     }
                 },
                 Date = DateTime.Now
@@ -86,40 +92,28 @@ public partial class TasksPageViewModel : ObservableObject
             .SelectMany(project => project.Tasks.Select(task => task.Username))
             .Distinct().ToObservableCollection();
     }
-
+    [RelayCommand]
+    private void ChangeDoneStatus(TaskModel task)
+    {
+        task.IsDone = !task.IsDone;
+    }
     [RelayCommand]
     private void DateSelected(DateTime date)
     {
         NewTaskDate = date;
     }
+    [RelayCommand]
+    private void TaskProgressUpdated(TaskModel date)
+    {
+        var projects = ProjectTaskList;
+        var project = projects.First(x => x.Title.Equals(date.LinkedProjectName));
+         project.CompletedPercentage= project.Tasks.Average(t => t.CompletedPercentage);
+         // ProjectTaskList = new ObservableCollection<ProjectModel>(projects);
 
+    }
+   
     [RelayCommand]
     private void AddTask()
-    {
-        var projects = new List<ProjectModel>(ProjectTaskList);
-            var project = projects.Find(x =>
-            x.Title.Equals(SelectedProjectTitle, StringComparison.InvariantCultureIgnoreCase));
-        project.Date = NewTaskDate;
-        var tasks = project.Tasks.ToList();
-           tasks.Add(
-                new TaskModel
-                {
-                    Title = NewTaskTitle,
-                    IsDone = false,
-                    Username = NewUserName,
-                    CompletedPercentage = 0,
-                });
-           projects.First(x => x.Title.Equals(SelectedProjectTitle, StringComparison.InvariantCultureIgnoreCase))
-               .Tasks = new ObservableCollection<TaskModel>(tasks);
-
-        ProjectTaskList = new ObservableCollection<ProjectModel>(projects);
-        NewUserName = string.Empty;
-        NewTaskTitle = string.Empty;
-        NewTaskDate = DateTime.Today;
-        SelectedProjectTitle = string.Empty;
-    }
-    [RelayCommand]
-    private void AddToDo()
     {
         var project = ProjectTaskList.FirstOrDefault(x =>
             x.Title.Equals(SelectedProjectTitle, StringComparison.InvariantCultureIgnoreCase));
@@ -132,6 +126,7 @@ public partial class TasksPageViewModel : ObservableObject
             {
                 Title = NewTaskTitle,
                 IsDone = false,
+                LinkedProjectName=SelectedProjectTitle,
                 Username = NewUserName,
                 CompletedPercentage = 0
             });

@@ -3,7 +3,7 @@ namespace mywork.ishatechnohub.Models;
 public partial class ProjectModel : ObservableObject
 {
     [ObservableProperty] private string _title;
-    [ObservableProperty] private int _completedPercentage;
+    [ObservableProperty] private double _completedPercentage;
     [ObservableProperty] private IEnumerable<TaskModel> _tasks;
     [ObservableProperty] private int _taskCount;
     [ObservableProperty] private string _dateString;
