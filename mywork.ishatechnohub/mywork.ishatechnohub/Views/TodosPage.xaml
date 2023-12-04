@@ -4,15 +4,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:mywork.ishatechnohub.Models"
              xmlns:viewModels="clr-namespace:mywork.ishatechnohub.ViewModels"
-             xmlns:views="clr-namespace:mywork.ishatechnohub.Views"
              x:Class="mywork.ishatechnohub.Views.TodosPage"
              x:DataType="viewModels:TodosPageViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="WhiteSmoke"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource Gray300},Light=WhiteSmoke,Default=WhiteSmoke}"
              x:Name="MainPageContainer">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <views:BoolToColorConverter x:Key="BoolToColor" />
             <DataTemplate x:Key="TodoItemTemplate"
                           x:DataType="models:TodoItem">
                 <VerticalStackLayout BackgroundColor="Transparent"
@@ -106,37 +104,69 @@
     </ContentPage.Resources>
     <ContentPage.Content>
 
-        <Grid RowDefinitions="*,Auto"
-              ColumnDefinitions="*,Auto,Auto"
-              ColumnSpacing="4"
+        <Grid RowDefinitions="100,*,Auto"
+              RowSpacing="8"
               Margin="16"
               x:Name="Root">
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="*,auto,auto"
+                  ColumnSpacing="4" >
+            <Image
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="Start"
+                Source="dotnet_bot"/>
+            <HorizontalStackLayout
+                Grid.Column="1"
+                VerticalOptions="Center"
+                HorizontalOptions="End">
+                <Label Text="Light Mode" VerticalOptions="Center" Margin="5,0,5,0" />
+                <Switch x:Name="ThemeSwitch"  Toggled="ThemeSwitch_OnToggled" />
+                <Label Text="Dark Mode" VerticalOptions="Center" Margin="5,0,5,0" />
+            </HorizontalStackLayout>
+            <ImageButton
+                Grid.Column="2"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="End"
+                HeightRequest="25"
+                WidthRequest="25"
+                Source="dotnet_bot"
+                Clicked="ImageButton_OnClicked"/>
+            </Grid>
             <CollectionView
+                Grid.Row="1"
                 Grid.ColumnSpan="3"
                 ItemsSource="{Binding TodoItemsList}"
                 ItemTemplate="{StaticResource TodoItemTemplate}" />
-            <Entry Grid.Row="2"
-                   Text="{Binding NewToDoTitle}" />
+            <Grid Grid.Row="2"
+                  ColumnDefinitions="*,auto,auto"
+                  ColumnSpacing="4"
+            >
+            <Entry 
+                   Grid.Column="0"
+                   
+                   Text="{Binding NewToDoTitle}"
+                   HorizontalOptions="FillAndExpand"
+                   BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light=WhiteSmoke,Default=WhiteSmoke}"
+                   />
             <Button
-                Grid.Row="2"
                 Grid.Column="1"
                 Text="#"
+                HorizontalOptions="End"
                 Clicked="TapGestureRecognizer_OnTapped" />
             <DatePicker
                 x:Name="MyDatePicker"
-                Grid.Row="2"
                 Grid.Column="1"
                 Opacity="0"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand"
+                HorizontalOptions="End"
+                VerticalOptions="End"
                 IsVisible="{OnPlatform iOS=false,Default=true}"
                 Date="{Binding NewToDoDate}"
                 DateSelected="MyDatePicker_OnDateSelected" />
             <Button
-                Grid.Row="2"
                 Grid.Column="2"
                 Text="+"
                 Command="{Binding AddToDoCommand}" />
+        </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

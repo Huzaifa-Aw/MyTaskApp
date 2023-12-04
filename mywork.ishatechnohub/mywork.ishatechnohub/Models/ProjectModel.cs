@@ -4,10 +4,9 @@ public partial class ProjectModel : ObservableObject
 {
     [ObservableProperty] private string _title;
     [ObservableProperty] private double _completedPercentage;
-    [ObservableProperty] private IEnumerable<TaskModel> _tasks;
+    [ObservableProperty] private ObservableCollection<TaskModel> _tasks;
     [ObservableProperty] private int _taskCount;
     [ObservableProperty] private string _dateString;
-
     public DateTime Date
     {
         get => _tempDate;
@@ -19,7 +18,7 @@ public partial class ProjectModel : ObservableObject
     }
 
     private DateTime _tempDate;
-    partial void OnTasksChanged(IEnumerable<TaskModel> oldValue, IEnumerable<TaskModel> newValue)
+    partial void OnTasksChanged(ObservableCollection<TaskModel> oldValue, ObservableCollection<TaskModel> newValue)
     {
         TaskCount = newValue.Count();
     }

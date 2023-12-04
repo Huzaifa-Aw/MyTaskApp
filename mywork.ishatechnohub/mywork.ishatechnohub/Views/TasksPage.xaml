@@ -10,7 +10,8 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              x:DataType="viewModels:TasksPageViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="WhiteSmoke">
+             BackgroundColor="{AppThemeBinding Dark={StaticResource Gray300},Light=WhiteSmoke,Default=WhiteSmoke}"
+             x:Name="MainPageContainer">
     <ContentPage.Resources>
         <ResourceDictionary>
             <ishatechnohub:GradientColorConverter x:Key="GradientColorConverter" />
@@ -20,21 +21,24 @@
                 <VerticalStackLayout
                     Margin="0,8">
                     <Border StrokeThickness="2"
-                            BackgroundColor="{StaticResource Gray100}"
-                            Stroke="{StaticResource  Gray400Brush}"
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light={StaticResource Gray100},Default={StaticResource Gray100}}"
+                            Stroke="{StaticResource  Gray500Brush}"
                             Padding="4">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="4"></RoundRectangle>
                         </Border.StrokeShape>
+                       
                         <mct:Expander
                             x:Name="ExpanderControl"
-                            VerticalOptions="Start"
-                            HorizontalOptions="Fill">
+                            VerticalOptions="FillAndExpand"
+                            HorizontalOptions="FillAndExpand">
                             <mct:Expander.Header>
                                 <Grid Padding="0"
                                       HeightRequest="40"
                                       HorizontalOptions="FillAndExpand"
-                                      ColumnDefinitions="Auto,*,Auto,24">
+                                      ColumnDefinitions="Auto,*,Auto,24"
+                                      BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light=Transparent,Default=Transparent}"
+                                      >
                                     <Border
                                         BackgroundColor="{StaticResource Primary}"
                                         Padding="8,0"
@@ -57,7 +61,8 @@
                                         HorizontalOptions="FillAndExpand"
                                         StrokeThickness="0"
                                         Margin="0"
-                                        Padding="0">
+                                        Padding="0"
+                                        >
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="8" />
                                         </Border.StrokeShape>
@@ -100,15 +105,24 @@
                                         <DataTemplate x:DataType="models:TaskModel">
                                             <VerticalStackLayout Margin="0,4">
                                                 <Border StrokeThickness="2"
-                                                        BackgroundColor="WhiteSmoke"
-                                                        Stroke="{StaticResource  Gray400Brush}"
+                                                        BackgroundColor="{AppThemeBinding Dark={StaticResource Gray500},Light=WhiteSmoke,Default=WhiteSmoke}"
+                                                        Stroke="{StaticResource  Gray600Brush}"
                                                         Padding="4">
                                                     <Border.StrokeShape>
                                                         <RoundRectangle CornerRadius="4"></RoundRectangle>
                                                     </Border.StrokeShape>
+                                                    <VerticalStackLayout BackgroundColor="Transparent"
+                                                                         HorizontalOptions="FillAndExpand">
+                                                        <StackLayout
+                                                            Padding="10"
+                                                            BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource BoolToColor}}"
+                                                            HorizontalOptions="FillAndExpand"
+                                                            Orientation="Horizontal"
+                                                            VerticalOptions="FillAndExpand">
                                                     <Grid ColumnDefinitions="25,*,Auto,*"
                                                           ColumnSpacing="4"
-                                                          HorizontalOptions="FillAndExpand">
+                                                          HorizontalOptions="FillAndExpand"
+                                                          VerticalOptions="Center">
                                                         <Grid HeightRequest="25" WidthRequest="25">
                                                             <ImageButton
                                                                 Source="checked_image"
@@ -150,6 +164,28 @@
                                                             ValueChanged="Slider_OnValueChanged">
                                                         </Slider>
                                                     </Grid>
+                                                          <StackLayout.GestureRecognizers>
+                                                                <DragGestureRecognizer
+                                                                    CanDrag="True"
+                                                                    DragStartingCommand="{Binding BindingContext.ItemDraggedCommand, Source={x:Reference MainPageContainer}}"
+                                                                    DragStartingCommandParameter="{Binding}" />
+                                                                <DropGestureRecognizer
+                                                                    AllowDrop="True"
+                                                                    DragLeaveCommand="{Binding BindingContext.ItemDragLeaveCommand, Source={x:Reference MainPageContainer}}"
+                                                                    DragLeaveCommandParameter="{Binding}"
+                                                                    DragOverCommand="{Binding BindingContext.ItemDraggedOverCommand, Source={x:Reference MainPageContainer}}"
+                                                                    DragOverCommandParameter="{Binding}"
+                                                                    DropCommand="{Binding BindingContext.ItemDroppedCommand, Source={x:Reference MainPageContainer}}"
+                                                                    DropCommandParameter="{Binding}" />
+                                                            </StackLayout.GestureRecognizers>
+                                                        </StackLayout>
+                                                        <StackLayout
+                                                            BackgroundColor="LightGray"
+                                                            HeightRequest="30"
+                                                            HorizontalOptions="FillAndExpand"
+                                                            IsVisible="{Binding IsBeingDraggedOver}"
+                                                            VerticalOptions="FillAndExpand" />
+                                                    </VerticalStackLayout>         
                                                 </Border>
                                             </VerticalStackLayout>
                                         </DataTemplate>
@@ -158,6 +194,7 @@
                             </VerticalStackLayout>
 
                         </mct:Expander>
+                               
                     </Border>
                 </VerticalStackLayout>
             </DataTemplate>
@@ -188,10 +225,8 @@
                 Grid.Row="0"
                 Grid.ColumnSpan="3">
                 <VerticalStackLayout
-                    x:Name="BindableStackLayout"
                     BindableLayout.ItemsSource="{Binding ProjectTaskList}"
                     BindableLayout.ItemTemplate="{StaticResource  ExpanderDataTemplate}" />
-
             </ScrollView>
             <Grid
                 Grid.Row="1"
@@ -200,7 +235,9 @@
                 <Picker x:Name="ProjectPicker"
                         ItemsSource="{Binding ProjectsList}"
                         SelectedItem="{Binding SelectedProjectTitle}"
-                        SelectedIndexChanged="ProjectPicker_OnSelectedIndexChanged">
+                        SelectedIndexChanged="ProjectPicker_OnSelectedIndexChanged"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light=WhiteSmoke,Default=WhiteSmoke}"
+>
                 </Picker>
                 <Button
                     Grid.Column="1"
@@ -225,7 +262,9 @@
                     Command="{Binding AddTaskCommand}" />
             </Grid>
             <Entry Grid.Row="2"
-                   Text="{Binding NewTaskTitle}" />
+                   Text="{Binding NewTaskTitle}" 
+                   BackgroundColor="{AppThemeBinding Dark={StaticResource Gray400},Light=WhiteSmoke,Default=WhiteSmoke}"
+                   />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

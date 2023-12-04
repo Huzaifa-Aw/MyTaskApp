@@ -20,7 +20,7 @@ public partial class TasksPageViewModel : ObservableObject
             {
                 Title = "Project 1",
                 CompletedPercentage = 0,
-                Tasks = new List<TaskModel>()
+                Tasks = new ObservableCollection<TaskModel>()
                 {
                     new TaskModel()
                     {
@@ -43,7 +43,7 @@ public partial class TasksPageViewModel : ObservableObject
             {
                 Title = "Project 2",
                 CompletedPercentage = 0,
-                Tasks = new List<TaskModel>()
+                Tasks = new ObservableCollection<TaskModel>()
                 {
                     new TaskModel()
                     {
@@ -66,7 +66,7 @@ public partial class TasksPageViewModel : ObservableObject
             {
                 Title = "Project 3",
                 CompletedPercentage = 0,
-                Tasks = new List<TaskModel>()
+                Tasks = new ObservableCollection<TaskModel>()
                 {
                     new TaskModel()
                     {
@@ -95,9 +95,17 @@ public partial class TasksPageViewModel : ObservableObject
     [RelayCommand]
     private void ChangeDoneStatus(TaskModel task)
     {
-        task.IsDone = !task.IsDone;
+        if (task.IsDone) return;
+        var project = ProjectTaskList.First(x =>
+            x.Title.Equals(task.LinkedProjectName, StringComparison.InvariantCultureIgnoreCase));
+        var tobeRemoved=project.Tasks.First(t=>t.Title.Equals(task.Title));
+        var remainingTasks=project.Tasks;
+        remainingTasks.Remove(tobeRemoved);
+        project.TaskCount = remainingTasks.Count;
+        //project.Tasks= new ObservableCollection<TaskModel>(remainingTasks);
     }
-    [RelayCommand]
+
+[RelayCommand]
     private void DateSelected(DateTime date)
     {
         NewTaskDate = date;
@@ -131,12 +139,57 @@ public partial class TasksPageViewModel : ObservableObject
                 CompletedPercentage = 0
             });
 
-            project.Tasks = tasksList; 
+            project.Tasks = tasksList.ToObservableCollection(); 
         }
 
         NewUserName = string.Empty;
         NewTaskTitle = string.Empty;
         NewTaskDate = DateTime.Today;
         SelectedProjectTitle = string.Empty;
+    }
+    private TaskModel _itemBeingDragged;
+    [RelayCommand]
+    private void ItemDragged(TaskModel user)
+    {
+        user.IsBeingDragged = true;
+        _itemBeingDragged = user;
+    }
+    [RelayCommand]
+    private void ItemDragLeave(TaskModel user)
+    {
+        user.IsBeingDraggedOver = false;
+    }
+    [RelayCommand]
+    private void ItemDraggedOver(TaskModel user)
+    {
+        if (user == _itemBeingDragged)
+        {
+            user.IsBeingDragged = false;
+        }
+        user.IsBeingDraggedOver = user != _itemBeingDragged;
+    }
+    [RelayCommand]
+    private void ItemDropped(TaskModel user)
+    {
+        try
+        {
+            var itemToMove = _itemBeingDragged;
+            var itemToInsertBefore = user;
+            if (itemToMove == null || itemToInsertBefore == null || itemToMove == itemToInsertBefore)
+                return;
+            var project = ProjectTaskList.First(x => x.Title.Equals(itemToInsertBefore.LinkedProjectName));
+            int insertAtIndex = project.Tasks.IndexOf(itemToInsertBefore);
+            if (insertAtIndex >= 0 && insertAtIndex < ProjectTaskList.Count)
+            {
+                project.Tasks.Remove(itemToMove);
+                project.Tasks.Insert(insertAtIndex, itemToMove);
+                itemToMove.IsBeingDragged = false;
+                itemToInsertBefore.IsBeingDraggedOver = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            // ignored
+        }
     }
 }
