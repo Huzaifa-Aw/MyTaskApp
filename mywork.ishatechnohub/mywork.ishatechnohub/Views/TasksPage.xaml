@@ -160,8 +160,7 @@
                                                             MaximumTrackColor="{StaticResource Secondary}"
                                                             Minimum="0"
                                                             Maximum="100"
-
-                                                            ValueChanged="Slider_OnValueChanged">
+                                                            DragCompleted="Slider_DragCompleted">
                                                         </Slider>
                                                     </Grid>
                                                           <StackLayout.GestureRecognizers>

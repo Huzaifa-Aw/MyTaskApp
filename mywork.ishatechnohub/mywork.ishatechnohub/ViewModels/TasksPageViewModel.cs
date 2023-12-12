@@ -87,6 +87,8 @@ public partial class TasksPageViewModel : ObservableObject
             }
         };
         ProjectsList = ProjectTaskList.Select(x => x.Title).ToObservableCollection();
+        ProjectTaskList.ToList()
+            .ForEach(proj => proj.CompletedPercentage = proj.Tasks.Average(t => t.CompletedPercentage));
         SelectedProjectTitle = ProjectsList.FirstOrDefault()!;
         UsersList = ProjectTaskList
             .SelectMany(project => project.Tasks.Select(task => task.Username))
@@ -102,7 +104,6 @@ public partial class TasksPageViewModel : ObservableObject
         var remainingTasks=project.Tasks;
         remainingTasks.Remove(tobeRemoved);
         project.TaskCount = remainingTasks.Count;
-        //project.Tasks= new ObservableCollection<TaskModel>(remainingTasks);
     }
 
 [RelayCommand]

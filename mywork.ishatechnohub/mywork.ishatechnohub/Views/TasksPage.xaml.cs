@@ -86,25 +86,17 @@ public partial class TasksPage
         _viewModel.NewUserName = picker.SelectedItem.ToString() ?? string.Empty;
     }
 
-    private void Slider_OnValueChanged(object sender, ValueChangedEventArgs e)
+    private void Slider_DragCompleted(object sender, EventArgs e)
     {
         if (sender is not Slider progressSlider)
         {
             return;
         }
-
-        if (e.NewValue % 25 is not 0)
+        var snappedValue = Math.Round(progressSlider.Value / 25) * 25;
+        progressSlider.Value = snappedValue;
+        if (_viewModel.TaskProgressUpdatedCommand.CanExecute((TaskModel)progressSlider.BindingContext))
         {
-            var snappedValue = Math.Round(e.NewValue / 25) * 25;
-            progressSlider.Value = snappedValue;
-        }
-        else
-        {
-            if (_viewModel.TaskProgressUpdatedCommand is not null &&
-                _viewModel.TaskProgressUpdatedCommand.CanExecute((TaskModel)progressSlider.BindingContext))
-            {
-                _viewModel.TaskProgressUpdatedCommand.Execute((TaskModel)progressSlider.BindingContext);
-            }
+            _viewModel.TaskProgressUpdatedCommand.Execute((TaskModel)progressSlider.BindingContext);
         }
     }
 }
